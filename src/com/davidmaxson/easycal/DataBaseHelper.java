@@ -8,16 +8,15 @@ import android.database.SQLException;
 import android.database.sqlite.*;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-	//private static final String DB_PATH = 
-	//		"/data/data/com.davidmaxson.easycal/databases/";
+	// private static final String DB_PATH =
+	// "/data/data/com.davidmaxson.easycal/databases/";
 
 	private Context mycontext;
 
 	private String DB_PATH = "";
 	private static String DB_NAME = "notes.sqlite";// the extension may
-															// be .sqlite or .db
+													// be .sqlite or .db
 	public SQLiteDatabase myDataBase;
-	private final String CREATE_DB = "CREATE TABLE Notes ( date DATE PRIMARY KEY, note VARCHAR )";
 
 	/*
 	 * private String DB_PATH = "/data/data/" +
@@ -38,18 +37,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	}
 
-	public void createdatabase() throws IOException {
-		boolean dbexist = checkdatabase();
-		if (dbexist) {
-			// System.out.println(" Database exists.");
-		} else {
-			SQLiteDatabase db = this.getWritableDatabase();
-			try {
-				db.execSQL(CREATE_DB);
-			} catch (SQLException e) {
-				throw new Error("Error creating database");
-			}
-		}
+	public void createdatabase() throws SQLException {
+		myDataBase = this.getWritableDatabase();
 	}
 
 	private boolean checkdatabase() {
@@ -79,12 +68,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
