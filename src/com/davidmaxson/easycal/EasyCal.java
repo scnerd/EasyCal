@@ -180,7 +180,7 @@ public class EasyCal extends Activity {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				centerDate = Calendar.getInstance();
-				setNewDay((Calendar)centerDate.clone());
+				setNewDay((Calendar) centerDate.clone());
 			}
 		});
 
@@ -190,13 +190,13 @@ public class EasyCal extends Activity {
 	}
 
 	private void changeDay(int changeInDays) {
-		
+
 		Calendar cal = (Calendar) centerDate.clone();
 		cal.add(Calendar.DATE, changeInDays);
-		if(Math.abs(changeInDays) > 3)
-			centerDate = (Calendar)cal.clone();
+		if (Math.abs(changeInDays) > 3)
+			centerDate = (Calendar) cal.clone();
 		setNewDay(cal);
-		
+
 	}
 
 	private void setNewDay(Calendar newDate) {
@@ -205,8 +205,8 @@ public class EasyCal extends Activity {
 		}
 
 		selectedDate = newDate;
-		if(centerDate == null)
-			centerDate = (Calendar)selectedDate.clone();
+		if (centerDate == null)
+			centerDate = (Calendar) selectedDate.clone();
 
 		// Go from day-3 to day+3
 		Calendar tmpDate = (Calendar) centerDate.clone();
@@ -214,7 +214,7 @@ public class EasyCal extends Activity {
 
 		btnLess3.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblLess3.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnLess3.setTextColor(0xFF0000FF);
 		else
 			btnLess3.setTextColor(0xFF000000);
@@ -222,7 +222,7 @@ public class EasyCal extends Activity {
 
 		btnLess2.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblLess2.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnLess2.setTextColor(0xFF0000FF);
 		else
 			btnLess2.setTextColor(0xFF000000);
@@ -230,7 +230,7 @@ public class EasyCal extends Activity {
 
 		btnLess1.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblLess1.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnLess1.setTextColor(0xFF0000FF);
 		else
 			btnLess1.setTextColor(0xFF000000);
@@ -238,8 +238,9 @@ public class EasyCal extends Activity {
 
 		btnDay0.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblDay0.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		lblSelectedDay.setText(selectedDateFormatter.format(selectedDate.getTime()));
-		if(!"".equals(sqlSelect(tmpDate)))
+		lblSelectedDay.setText(selectedDateFormatter.format(selectedDate
+				.getTime()));
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnDay0.setTextColor(0xFF0000FF);
 		else
 			btnDay0.setTextColor(0xFF000000);
@@ -247,7 +248,7 @@ public class EasyCal extends Activity {
 
 		btnMore1.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblMore1.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnMore1.setTextColor(0xFF0000FF);
 		else
 			btnMore1.setTextColor(0xFF000000);
@@ -255,7 +256,7 @@ public class EasyCal extends Activity {
 
 		btnMore2.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblMore2.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnMore2.setTextColor(0xFF0000FF);
 		else
 			btnMore2.setTextColor(0xFF000000);
@@ -263,7 +264,7 @@ public class EasyCal extends Activity {
 
 		btnMore3.setText(Integer.toString(tmpDate.get(Calendar.DAY_OF_MONTH)));
 		lblMore3.setText(daysOfWeekShort[tmpDate.get(Calendar.DAY_OF_WEEK)]);
-		if(!"".equals(sqlSelect(tmpDate)))
+		if (!"".equals(sqlSelect(tmpDate)))
 			btnMore3.setTextColor(0xFF0000FF);
 		else
 			btnMore3.setTextColor(0xFF000000);
@@ -329,10 +330,29 @@ public class EasyCal extends Activity {
 		getMenuInflater().inflate(R.menu.easy_cal, menu);
 		return true;
 	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		saveCurrentNotes();
+		outState.putLong("selectedDate", selectedDate.getTimeInMillis());
+		outState.putLong("centerDate", centerDate.getTimeInMillis());
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		centerDate = Calendar.getInstance();
+		centerDate.setTimeInMillis(savedInstanceState.getLong("centerDate"));
+		selectedDate = Calendar.getInstance();
+		selectedDate.setTimeInMillis(savedInstanceState.getLong("selectedDate"));
+		setNewDay(selectedDate);
+	};
 
 	@Override
 	protected void onDestroy() {
-		saveCurrentNotes();
 		dbNotes.close();
 		super.onDestroy();
 
